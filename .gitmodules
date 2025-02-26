@@ -1,0 +1,4 @@
+[submodule "mender-convert"]
+	path = mender-convert
+	url = https://github.com/mendersoftware/mender-convert
+	branch = master
