@@ -2,3 +2,7 @@
 	path = mender-convert
 	url = https://github.com/mendersoftware/mender-convert
 	branch = master
+[submodule "mender-artifact"]
+	path = mender-artifact
+	url = https://github.com/mendersoftware/mender-artifact.git
+	branch = master
