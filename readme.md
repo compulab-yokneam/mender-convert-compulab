@@ -36,3 +36,8 @@ sudo ./scripts/mender-convert-compulab.sh
 ```
 MACHINE_CONSOLE="console=ttymxc2,115200" sudo -E ./scripts/mender-convert-compulab.sh
 ```
+
+* Use different image location:
+```
+IMAGE=/full/path/to/debian-bookworm-arm64.img sudo -E ./scripts/mender-convert-compulab.sh
+```
