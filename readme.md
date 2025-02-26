@@ -26,6 +26,13 @@ ln -s /full/path/to/debian-bookworm-arm64.img mender-convert/input/debian-bookwo
 ```
 
 ## Run the converter
+
+* Default run:
 ```
 sudo ./scripts/mender-convert-compulab.sh
+```
+
+* Use a different MACHINE_CONSOLE:
+```
+MACHINE_CONSOLE="console=ttymxc2,115200" sudo -E ./scripts/mender-convert-compulab.sh
 ```
