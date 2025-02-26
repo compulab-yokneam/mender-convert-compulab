@@ -1,8 +1,11 @@
 #!/bin/bash -xv
 
+D=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+M=$(readlink -e ${D}/../mender-convert)
+
 BINFMT=/usr/lib/systemd/systemd-binfmt
-CONFIG=configs/compulab_debian_64bit_config
-IMAGE=${IMAGE:-"input/debian-bookworm-arm64.img"}
+CONFIG=${M}/configs/compulab_debian_64bit_config
+IMAGE=${IMAGE:-"${M}/input/debian-bookworm-arm64.img"}
 
 function compulab_config() {
 cat << EOF
@@ -44,7 +47,9 @@ rm -rf ${CONFIG}
 
 compulab_init
 
-MENDER_ARTIFACT_NAME=release-1 ./mender-convert \
+cd ${M}
+
+MENDER_ARTIFACT_NAME=release-1 ${M}/mender-convert \
    --disk-image ${IMAGE} \
    --config ${CONFIG} \
    --overlay input/rootfs_overlay_demo
