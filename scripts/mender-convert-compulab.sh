@@ -6,6 +6,7 @@ M=$(readlink -e ${D}/../mender-convert)
 BINFMT=/usr/lib/systemd/systemd-binfmt
 CONFIG=${M}/configs/compulab_debian_64bit_config
 IMAGE=${IMAGE:-"${M}/input/debian-bookworm-arm64.img"}
+MACHINE_CONSOLE=${MACHINE_CONSOLE:-"console=ttymxc1,115200 console=tty0,115200n8"}
 
 function compulab_config() {
 cat << EOF
@@ -28,7 +29,7 @@ MENDER_COPY_BOOT_GAP="none"
 # MENDER_GRUB_D_INTEGRATION="y"
 
 function compulab_modify_hook() {
-    sed 's/\(set console_bootargs\).*/\1="console=ttymxc1,115200 console=tty0,115200n8"/' work/boot/EFI/BOOT/grub.cfg > work/boot/efi/boot/grub.cfg
+    sed 's/\(set console_bootargs\).*/\1="@@@MACHINE_CONSOLE@@@"/' work/boot/EFI/BOOT/grub.cfg > work/boot/efi/boot/grub.cfg
     true
 }
 PLATFORM_MODIFY_HOOKS+=(compulab_modify_hook)
@@ -38,6 +39,7 @@ EOF
 function compulab_init() {
 [[ ! -f ${BINFMT} ]] || chmod 0644 ${BINFMT}
 compulab_config > ${CONFIG}
+sed -i "s/@@@MACHINE_CONSOLE@@@/${MACHINE_CONSOLE}/g" ${CONFIG}
 }
 
 function compulab_fini() {
