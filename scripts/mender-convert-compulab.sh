@@ -14,8 +14,6 @@ function compulab_config() {
 cat << EOF
 source configs/mender_convert_config
 
-# Set image type for CompuLam 8mm platform
-MENDER_GRUB_KERNEL_IMAGETYPE=Image
 MENDER_IGNORE_MISSING_EFI_STUB=1
 MENDER_STORAGE_TOTAL_SIZE_MB=12000
 MENDER_ENABLE_PARTUUID=y
@@ -50,6 +48,9 @@ function compulab_init_console() {
 
 function compulab_config_update() {
 cat << EOF
+
+# This is an imx8mm config
+MENDER_GRUB_KERNEL_IMAGETYPE=Image
 
 function compulab_modify_hook_01() {
     cp @@@BOOT_SCRIPT@@@ work/boot/boot.scr
