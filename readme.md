@@ -34,15 +34,20 @@ sudo ./scripts/mender-convert-compulab.sh
 
 * Use a different MACHINE_CONSOLE:
 ```
-MACHINE_CONSOLE="console=ttymxc2,115200" sudo -E ./scripts/mender-convert-compulab.sh
+MACHINE_CONSOLE="console=ttymxc2,115200" \
+sudo -E ./scripts/mender-convert-compulab.sh
 ```
 
 * Use different image location:
 ```
-IMAGE=/full/path/to/debian-bookworm-arm64.img sudo -E ./scripts/mender-convert-compulab.sh
+IMAGE=/full/path/to/debian-bookworm-arm64.img \
+sudo -E ./scripts/mender-convert-compulab.sh
 ```
 
 * CompuLab imx8mm sample run:
 ```
-MACHINE_BOOTSCRIPT="Yes" IMAGE=/path/to/debian.12.iot-gate-imx8.img MACHINE_CONSOLE="console=ttymxc2,115200 earlycon=ec_imx6q,0x30880000,115200" sudo -E ./scripts/mender-convert-compulab.sh
+MACHINE_BOOTSCRIPT="Yes" \
+IMAGE=/path/to/debian.12.iot-gate-imx8.img \
+MACHINE_CONSOLE="console=ttymxc2,115200 earlycon=ec_imx6q,0x30880000,115200" \
+sudo -E ./scripts/mender-convert-compulab.sh
 ```
