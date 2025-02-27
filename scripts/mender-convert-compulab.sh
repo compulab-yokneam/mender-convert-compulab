@@ -1,7 +1,9 @@
 #!/bin/bash -xv
 
 D=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+O=$(readlink -e ${D}/overlay)
 M=$(readlink -e ${D}/../mender-convert)
+I=$(readlink -e ${D}/../mender-convert/input)
 
 BINFMT=/usr/lib/systemd/systemd-binfmt
 CONFIG=${M}/configs/compulab_debian_64bit_config
@@ -12,6 +14,8 @@ function compulab_config() {
 cat << EOF
 source configs/mender_convert_config
 
+# Set image type for CompuLam 8mm platform
+MENDER_GRUB_KERNEL_IMAGETYPE=Image
 MENDER_IGNORE_MISSING_EFI_STUB=1
 MENDER_STORAGE_TOTAL_SIZE_MB=12000
 MENDER_ENABLE_PARTUUID=y
@@ -29,17 +33,47 @@ MENDER_COPY_BOOT_GAP="none"
 # MENDER_GRUB_D_INTEGRATION="y"
 
 function compulab_modify_hook() {
-    sed 's/\(set console_bootargs\).*/\1="@@@MACHINE_CONSOLE@@@"/' work/boot/EFI/BOOT/grub.cfg > work/boot/efi/boot/grub.cfg
+    sed -i 's/\(set console_bootargs\).*/\1="@@@MACHINE_CONSOLE@@@"/' work/boot/EFI/BOOT/grub.cfg
+    # fix for 8mp images
+    if [ -f work/boot/efi/boot/grub.cfg ];then
+        cp work/boot/EFI/BOOT/grub.cfg work/boot/efi/boot/grub.cfg
+    fi
     true
 }
 PLATFORM_MODIFY_HOOKS+=(compulab_modify_hook)
 EOF
 }
 
+function compulab_init_console() {
+    sed -i "s/@@@MACHINE_CONSOLE@@@/${MACHINE_CONSOLE}/g" ${CONFIG}
+}
+
+function compulab_config_update() {
+cat << EOF
+
+function compulab_modify_hook_01() {
+    cp @@@BOOT_SCRIPT@@@ work/boot/boot.scr
+    true
+}
+PLATFORM_MODIFY_HOOKS+=(compulab_modify_hook_01)
+EOF
+}
+
+function compulab_init_bootscr() {
+    local _uri="https://raw.githubusercontent.com/compulab-yokneam/meta-mender-compulab/refs/heads/scarthgap-nxp/recipes-bsp/u-boot-scr/files/boot.script"
+    local BOOT_SCRIPT="${I}/boot.scr"
+    wget --directory-prefix ${I} ${_uri}
+    mkimage -C none -A arm -T script -d ${I}/boot.script ${BOOT_SCRIPT}
+    rm -rf ${I}/boot.script*
+    compulab_config_update >> ${CONFIG}
+    sed -i "s|@@@BOOT_SCRIPT@@@|${BOOT_SCRIPT}|g" ${CONFIG}
+}
+
 function compulab_init() {
 [[ ! -f ${BINFMT} ]] || chmod 0644 ${BINFMT}
 compulab_config > ${CONFIG}
-sed -i "s/@@@MACHINE_CONSOLE@@@/${MACHINE_CONSOLE}/g" ${CONFIG}
+compulab_init_console
+[[ -z "${MACHINE_BOOTSCRIPT}" ]] || compulab_init_bootscr
 }
 
 function compulab_fini() {
@@ -54,6 +88,6 @@ cd ${M}
 MENDER_ARTIFACT_NAME=release-1 ${M}/mender-convert \
    --disk-image ${IMAGE} \
    --config ${CONFIG} \
-   --overlay input/rootfs_overlay_demo
+   --overlay ${O}
 
 compulab_fini
