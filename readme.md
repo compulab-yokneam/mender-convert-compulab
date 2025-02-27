@@ -16,6 +16,13 @@
 |imx8mm|```xz -dc /path/to/debian.12.iot-gate-imx8-iot-gate-imx8-mender.img.xz \| sudo dd of=/dev/sdX bs=1M status=progress```|
 |imx8mp|```xz -dc /path/to/debian-bookworm-arm64-buildd.compulab-imx8mp-6.6.52-compulab-1.3-rw-gpt-sdcard-compulab-imx8mp-mender.img.xz \| sudo dd of=/dev/sdX bs=1M status=progress```|
 
+
+* How to deploy to the internal media:
+
+```
+DST=/dev/mmcblk2 sudo -E cl-deploy
+```
+
 ## Development Guide
 
 ### Prepare the source code
