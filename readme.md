@@ -1,6 +1,24 @@
 # mender-convert-compulab
 
-## Prepare the source code
+## Quick Start
+
+* Ready to run images:
+
+|Platforma|Location|
+|---|---|
+|imx8mm|https://drive.google.com/drive/folders/1jYLXg8eHX3neP5ioLKiKVxYTx05hvwjI|
+|imx8mp|https://drive.google.com/drive/folders/1DoaVligjgcbzNjdvjZvWCl6Y8pBfUkWv|
+
+* Create a mender media:
+
+|Platforma|Command|
+|---|---|
+|imx8mm|```xz -dc /path/to/debian.12.iot-gate-imx8-iot-gate-imx8-mender.img.xz \| sudo dd of=/dev/sdX bs=1M status=progress```|
+|imx8mp|```xz -dc /path/to/debian-bookworm-arm64-buildd.compulab-imx8mp-6.6.52-compulab-1.3-rw-gpt-sdcard-compulab-imx8mp-mender.img.xz \| sudo dd of=/dev/sdX bs=1M status=progress```|
+
+## Development Guide
+
+### Prepare the source code
 
 * Creat a work dir:
 ```
@@ -12,7 +30,7 @@ mkdir work-dir && cd work-dir
 git clone --recursive https://github.com/compulab-yokneam/mender-convert-compulab.git
 ```
 
-## Before the start
+### Before the start
 
 * Make and install the mender-artifact:
 ```
@@ -25,7 +43,7 @@ sudo cp mender-artifact/mender-artifact /usr/bin/
 ln -s /full/path/to/debian-bookworm-arm64.img mender-convert/input/debian-bookworm-arm64.img
 ```
 
-## Run the converter
+### Run the converter
 
 * Default run:
 ```
