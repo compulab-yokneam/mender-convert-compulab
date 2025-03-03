@@ -9,7 +9,7 @@
 |imx8mm|https://drive.google.com/drive/folders/1jYLXg8eHX3neP5ioLKiKVxYTx05hvwjI|
 |imx8mp|https://drive.google.com/drive/folders/1DoaVligjgcbzNjdvjZvWCl6Y8pBfUkWv|
 
-|WARNING|imx8mm platform has to have bootefi support enabled in the U-Boot|
+|NOTE|imx8mm platform has to have bootefi support enabled in the U-Boot|
 |---|---|
 
 * Create a mender media:
