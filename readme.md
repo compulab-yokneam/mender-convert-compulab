@@ -79,3 +79,11 @@ IMAGE=/path/to/debian.12.iot-gate-imx8.img \
 MACHINE_CONSOLE="console=ttymxc2,115200 earlycon=ec_imx6q,0x30880000,115200" \
 sudo -E ./scripts/mender-convert-compulab.sh
 ```
+
+* CompuLab imx95 sample run:
+```
+MACHINE_BOOTSCRIPT="Yes" \
+IMAGE=/path/to/debian.12.ucm-imx95.img \
+MACHINE_CONSOLE="console=ttyLP0,115200 console=tty1 earlycon cpuidle.off=1" \
+sudo -E ./scripts/mender-convert-compulab.sh
+```
